@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { logout, user } = useContext(AuthContext);
   const [isScroll, setIsScroll] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,6 +95,19 @@ const Navbar = () => {
             <FaTimes className="w-8 h-8 text-white" />
           )}
         </button>
+        {user && (
+          <div className=" gap-2 hidden md:flex items-center">
+            <span className="text-white italic ">welcome: {user.email}</span>
+            <button
+              onClick={() => {
+                (logout(), navigate("/signup"));
+              }}
+              className=" capitalize text-white font-sans"
+            >
+              logout
+            </button>
+          </div>
+        )}
       </div>
       {/* mobile nav */}
       {mobileOpen && (
@@ -102,16 +120,27 @@ const Navbar = () => {
               Home
             </Link>
             <Link
+              onClick={() => setMobileOpen((prev) => !prev)}
               to="#"
               className="capitalize text-[30px] font-sans text-white leading-relaxed"
             >
               featured artist
             </Link>
             <Link
+              onClick={() => setMobileOpen((prev) => !prev)}
               to="#"
               className="capitalize text-[30px] font-sans text-white leading-relaxed"
             >
               search
+            </Link>
+            <Link
+              onClick={() => {
+                (logout(), navigate("/signup"), setMobileOpen((prev) => !prev));
+              }}
+              to="#"
+              className="capitalize text-[30px] font-sans text-white leading-relaxed"
+            >
+              logout
             </Link>
           </div>
         </div>
