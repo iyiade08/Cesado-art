@@ -8,19 +8,34 @@ import SignUp from "./Auth/SignUp";
 import Login from "./Auth/Login";
 import Homepage from "./Pages/Homepage";
 import MainLayout from "./Layout/MainLayout";
+import AuthProvider from "./Context/AuthContext";
+import ProtectedRoute from "./Auth/ProtectedRoute";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
-    <Route path="/" element={<MainLayout />}>
-      <Route index element={<Homepage />} />
+    <>
+      <Route path="/" element={<MainLayout />}>
+        <Route
+          index
+          element={
+            <ProtectedRoute>
+              <Homepage />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
-    </Route>,
+    </>,
   ),
 );
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 };
 
 export default App;
